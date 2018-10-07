@@ -12,6 +12,7 @@ services:
       - /src/
     environment:
       - N_WORKERS=3
+    image: ${DOCKER_REGISTRY}/web
 
   nginx:
     restart: always
@@ -21,3 +22,4 @@ services:
       - "443:443"
     depends_on:
       - web
+    image: ${DOCKER_REGISTRY}/nginx

@@ -1,5 +1,5 @@
 # - Virtual Env
 env/
 
-# - Environment file
+# - Environment files
 .env

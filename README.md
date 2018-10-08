@@ -10,6 +10,20 @@ To build the images needed:
 $ make build
 ```
 
+To push the images to a repo:
+
+```bash
+$ make push
+```
+
+*Note:* Currently setup with AWS ECR so settings in the main .env file reflect that.  The environment variables `AWS_REGION` and `DOCKER_REPOSITORY` are set there.
+
+To do both the build and push in one step:
+
+```bash
+$ make
+```
+
 
 ## License
 

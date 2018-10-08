@@ -1,5 +1,5 @@
 #!make
-.PHONY: build push repo_login
+.PHONY: all build push repo_login
 
 #
 #	Helpers
@@ -16,7 +16,7 @@ all: build push
 
 build:
 	@echo "[INFO] Building docker images..."
-	docker-compose build
+	docker-compose build --no-cache
 
 push: repo_login
 	@echo "[INFO] Pushing docker images to repository..."

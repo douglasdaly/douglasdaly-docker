@@ -4,15 +4,11 @@ services:
   web:
     restart: always
     build: ./src
-    expose:
-      - "8000"
-    ports:
-      - "8000:8000"
-    volumes:
-      - /src/
     environment:
       - N_WORKERS=3
-    image: ${DOCKER_REGISTRY}/web
+    networks:
+      - nginx_network
+    image: ${DOCKER_REGISTRY}/web:${VERSION_TAG}
 
   nginx:
     restart: always
@@ -22,4 +18,10 @@ services:
       - "443:443"
     depends_on:
       - web
-    image: ${DOCKER_REGISTRY}/nginx
+    networks:
+      - nginx_network
+    image: ${DOCKER_REGISTRY}/nginx:${VERSION_TAG}
+
+networks:
+  nginx_network:
+    driver: bridge

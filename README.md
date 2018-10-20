@@ -2,7 +2,20 @@
 
 *Repository for building the docker containers to run [www.DouglasDaly.com](https://www.douglasdaly.com/ "My Website").*
 
+## Configure
+
+To configure the necessary variables for the build:
+
+```bash
+$ make configure
+```
+
+You'll also need to add the appropriate `.env` file to the `src/` directory for the web app (or ensure the required environment variables are provided somehow).
+
+
 ## Build
+
+### Production:
 
 To build the images needed:
 
@@ -23,6 +36,30 @@ To do both the build and push in one step:
 ```bash
 $ make
 ```
+
+### Debugging/Staging
+
+I've also setup some builds for testing the full setup on your local machine (sometimes there can be differences in what things look like behind NGINX/Gunicorn vs. the django runserver).
+
+The following command will build and run the docker images in debug/staging mode:
+
+```bash
+$ make debug
+```
+
+To do just the build:
+
+```bash
+$ make debug_build
+```
+
+And just the run:
+
+```bash
+$ make debug_run
+```
+
+This runs the server in production mode but with django debug/local settings.
 
 
 ## License

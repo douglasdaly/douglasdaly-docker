@@ -1,0 +1,27 @@
+{
+    "AWSEBDockerrunVersion": 2,
+    "containerDefinitions": [
+        {
+            "name": "web",
+            "image": "",
+            "essential": true,
+            "memory": 200
+        },
+        {
+            "name": "nginx",
+            "image": "",
+            "essential": true,
+            "memory": 200,
+            "portMappings": [
+                {
+                    "hostPort": 80,
+                    "containerPort": 80,
+                    "protocol": "tcp"
+                }
+            ],
+            "links": [
+                "web:web"
+            ]
+        }
+    ]
+}

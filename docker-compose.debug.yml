@@ -1,0 +1,37 @@
+version: '2'
+
+services:
+  web:
+    restart: always
+    build: ./debug_src
+    environment:
+      - N_WORKERS=3
+    networks:
+      - nginx_network
+    volumes:
+      - static_volume:/src/douglasdaly/static
+      - media_volume:/src/douglasdaly/media
+    image: web:${VERSION_TAG}-debug
+  
+  nginx:
+    restart: always
+    build: ./debug_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    depends_on:
+      - web
+    networks:
+      - nginx_network
+    volumes:
+      - static_volume:/src/douglasdaly/static
+      - media_volume:/src/douglasdaly/media
+    image: nginx:${VERSION_TAG}-debug
+
+networks:
+  nginx_network:
+    driver: bridge
+
+volumes:
+  static_volume:
+  media_volume:

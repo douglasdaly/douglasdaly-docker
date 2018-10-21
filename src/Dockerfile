@@ -20,11 +20,11 @@ RUN apk del git
 
 FROM python:3.6-alpine
 
-RUN apk update
-RUN apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev
-RUN apk add --no-cache --virtual build-deps gcc python-dev musl-dev && \
-    apk add --no-cache postgresql-dev 
-RUN apk add --no-cache make bash git
+RUN apk update && \
+    apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \
+    apk add --no-cache --virtual build-deps gcc python-dev musl-dev && \
+    apk add --no-cache postgresql-dev && \
+    apk add --no-cache make bash git
 
 # - Assemble application
 
@@ -33,13 +33,11 @@ COPY --from=builder /usr/src/app /src
 WORKDIR /src
 ADD .env .
 
-RUN mkdir /logs
-
+RUN mkdir logs/
 RUN make requirements
 
 # - Cleanup
-RUN apk del build-deps
-RUN apk del git
+RUN apk del build-deps git
 
 # - Entrypoint
 

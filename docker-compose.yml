@@ -8,7 +8,7 @@ services:
       - N_WORKERS=3
     networks:
       - nginx_network
-    image: ${DOCKER_REGISTRY}/web:${VERSION_TAG}
+    image: ${DOCKER_REGISTRY}/web:v${VERSION_TAG}
 
   nginx:
     restart: always
@@ -20,7 +20,7 @@ services:
       - web
     networks:
       - nginx_network
-    image: ${DOCKER_REGISTRY}/nginx:${VERSION_TAG}
+    image: ${DOCKER_REGISTRY}/nginx:v${VERSION_TAG}
 
 networks:
   nginx_network:

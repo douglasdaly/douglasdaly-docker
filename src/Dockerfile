@@ -9,7 +9,7 @@ RUN apk update
 RUN apk add git
 
 WORKDIR /usr/src/app
-RUN git clone --single-branch -b ${gitbranch} https://github.com/douglasdaly/douglasdaly.git .
+RUN git clone --single-branch -b ${gitbranch} --depth 1 https://github.com/douglasdaly/douglasdaly.git .
 RUN rm -rf .git
 
 RUN apk del git
@@ -20,8 +20,7 @@ RUN apk del git
 #
 
 FROM python:3.6-alpine
-ARG startcmd
-ENV START_COMMAND=$startcmd
+ARG buildtype
 
 RUN apk update && \
     apk add --no-cache jpeg-dev zlib-dev freetype-dev lcms2-dev openjpeg-dev tiff-dev tk-dev tcl-dev && \
@@ -38,14 +37,10 @@ WORKDIR /src
 RUN mkdir logs/
 RUN make requirements
 
-RUN if [ "$startcmd" = "debug" ]; then \
-        touch .env && \
-        python scripts/new_secret_key.py && \
-        make debug_setup; \
-    fi
+RUN if [ "$buildtype" = "debug" ]; then touch .env && python scripts/new_secret_key.py && make debug_setup; fi
 
 # - Cleanup
 RUN apk del build-deps git
 
 # - Entrypoint
-ENTRYPOINT make $START_COMMAND
+ENTRYPOINT make start

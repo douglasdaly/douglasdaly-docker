@@ -7,6 +7,7 @@ services:
       context: ./src
       args:
         gitbranch: master
+    entrypoint: make local_start
     environment:
       - N_WORKERS=3
     networks:

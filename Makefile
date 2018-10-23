@@ -2,6 +2,7 @@
 .PHONY: requirements configure \
 		all build push deploy \
 		debug debug_build debug_run \
+		stage stage_build stage_push \
 		deploy_aws aws_login
 
 #
@@ -41,7 +42,7 @@ all: build push deploy
 
 build: 
 	@echo "[INFO] Building docker images..."
-	docker-compose -f docker-compose.yml build --no-cache --force-rm
+	docker-compose -f docker-compose.yml build --no-cache --force-rm --build-arg startcmd=start --build-arg buildtype=production
 
 push: aws_login
 	@echo "[INFO] Pushing docker images to repository..."
@@ -54,13 +55,25 @@ deploy:
 		@echo "[ERROR] Not a supported platform for deployment!"
 	endif
 
+# - Staging related
+
+stage: stage_build stage_push
+
+stage_build:
+	@echo "[INFO] Building Staging docker images..."
+	docker-compose -f docker-compose.stage.yml build --no-cache --force-rm --build-arg startcmd=start --build-arg buildtype=staging
+
+stage_push: aws_login
+	@echo "[INFO] Pushing staging docker images to repository..."
+	docker-compose -f docker-compose.stage.yml push
+
 # - Debug related
 
 debug: debug_build debug_run
 
 debug_build:
 	@echo "[INFO] Building Debug docker images..."
-	docker-compose -f docker-compose.debug.yml build --no-cache --force-rm
+	docker-compose -f docker-compose.debug.yml build --no-cache --force-rm --build-arg startcmd=debug --build-arg buildtype=development
 
 debug_run:
 	@echo "[INFO] Running on local machine..."

@@ -10,7 +10,7 @@ To configure the necessary variables for the build:
 $ make configure
 ```
 
-You'll also need to add the appropriate `.env` file to the `src/` directory for the web app (or ensure the required environment variables are provided somehow).
+You'll also need to add the appropriate `production.env` file to the project for the web app (or ensure the required environment variables are provided somehow).
 
 
 ## Build

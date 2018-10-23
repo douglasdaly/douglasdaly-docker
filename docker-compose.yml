@@ -1,18 +1,24 @@
-version: '2'
+version: '3'
 
 services:
   web:
     restart: always
-    build: ./src
-    environment:
-      - N_WORKERS=3
+    build: 
+      context: ./src
+      args:
+        gitbranch: master
+    env_file:
+      - production.env
     networks:
       - nginx_network
     image: ${DOCKER_REGISTRY}/web:v${VERSION_TAG}
 
   nginx:
     restart: always
-    build: ./nginx
+    build: 
+      context: ./nginx
+      args:
+        nginxconf: douglasdaly.conf
     ports:
       - "80:80"
       - "443:443"

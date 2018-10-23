@@ -3,6 +3,7 @@ env/
 
 # - Environment files
 .env
+*.env
 
 # - Project Files (PyCharm)
 .idea/

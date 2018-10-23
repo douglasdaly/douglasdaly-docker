@@ -1,5 +1,9 @@
 FROM nginx:alpine
+ARG buildtype
+ARG nginxconf
 
 RUN rm /etc/nginx/conf.d/default.conf
 
-COPY douglasdaly.conf /etc/nginx/conf.d/
+RUN if [ "$buildtype" != "production" ]; then apk add --no-cache bash; fi
+
+COPY $nginxconf /etc/nginx/conf.d/

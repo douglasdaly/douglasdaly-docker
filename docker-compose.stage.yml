@@ -9,19 +9,18 @@ services:
         gitbranch: master
     environment:
       - N_WORKERS=3
+    env_file:
+      - staging.env
     networks:
       - nginx_network
-    volumes:
-      - static_volume:/src/douglasdaly/static
-      - media_volume:/src/douglasdaly/media
-    image: web:v${VERSION_TAG}-dev
+    image: web:v${VERSION_TAG}-stage
   
   nginx:
     restart: always
     build: 
       context: ./nginx
       args:
-        nginxconf: douglasdaly-debug.conf
+        nginxconf: douglasdaly.conf
     ports:
       - "80:80"
       - "443:443"
@@ -29,15 +28,8 @@ services:
       - web
     networks:
       - nginx_network
-    volumes:
-      - static_volume:/src/douglasdaly/static
-      - media_volume:/src/douglasdaly/media
-    image: nginx:v${VERSION_TAG}-dev
+    image: nginx:v${VERSION_TAG}-stage
 
 networks:
   nginx_network:
     driver: bridge
-
-volumes:
-  static_volume:
-  media_volume:

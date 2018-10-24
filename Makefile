@@ -1,4 +1,18 @@
 #!make
+
+#
+#	Default Configuration Settings
+#
+
+# Default Deployment Settings
+#   (these can be overridden in local .env file)
+DEPLOYMENT_TYPE=AWS
+
+
+#
+#	MAKEFILE
+#
+
 .PHONY: requirements configure \
 		all build push deploy \
 		debug debug_build debug_run \
@@ -6,7 +20,7 @@
 		deploy_aws aws_login
 
 #
-#	Variables
+#	Tools
 #
 
 PYTHON=python
@@ -17,8 +31,24 @@ PIP=pip
 #	Helpers
 #
 
+# Load env (if exists)
 ifneq ("$(wildcard .env)", "")
     include .env
+endif
+
+# Deploy Types Handling
+# - Push Command
+ifeq ($(DEPLOYMENT_TYPE), AWS)
+	PUSH_COMMAND=@make --quiet aws_login && docker-compose -f docker-compose.yml push
+else
+	PUSH_COMMAND=docker-compose -f docker-compose.yml push
+endif
+
+# - Deploy Command
+ifeq ($(DEPLOYMENT_TYPE), AWS)
+	DEPLOY_COMMAND=@make --quiet deploy_aws
+else
+	DEPLOY_COMMAND=@echo "[ERROR] Not a supported platform for deployment!"
 endif
 
 
@@ -44,16 +74,11 @@ build:
 	@echo "[INFO] Building docker images..."
 	docker-compose -f docker-compose.yml build --no-cache --force-rm --build-arg buildtype=production
 
-push: aws_login
-	@echo "[INFO] Pushing docker images to repository..."
-	docker-compose -f docker-compose.yml push
+push:
+	$(PUSH_COMMAND)
 
 deploy:
-	ifeq ($(DEPLOYMENT_TYPE), AWS)
-		@make deploy_aws
-	else
-		@echo "[ERROR] Not a supported platform for deployment!"
-	endif
+	$(DEPLOY_COMMAND)
 
 # - Staging related
 
@@ -73,13 +98,15 @@ debug: debug_build debug_run
 
 debug_build:
 	@echo "[INFO] Building Debug docker images..."
-	docker-compose -f docker-compose.debug.yml build --no-cache --force-rm --build-arg buildtype=development
+	docker-compose -f docker-compose.debug.yml build --no-cache --force-rm --build-arg buildtype=debug
 
 debug_run:
 	@echo "[INFO] Running on local machine..."
 	docker-compose -f docker-compose.debug.yml up
 
 # - Helpers
+
+# -- AWS
 
 aws_login:
 	@echo "[INFO] Logging into AWS ECR..."

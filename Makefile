@@ -38,10 +38,9 @@ endif
 
 # Deploy Types Handling
 # - Push Command
+PUSH_COMMAND_PRE=@echo ""
 ifeq ($(DEPLOYMENT_TYPE), AWS)
-	PUSH_COMMAND=@make --quiet aws_login && docker-compose -f docker-compose.yml push
-else
-	PUSH_COMMAND=docker-compose -f docker-compose.yml push
+	PUSH_COMMAND_PRE=@make --quiet aws_login
 endif
 
 # - Deploy Command
@@ -73,9 +72,10 @@ all: build push deploy
 build: 
 	@echo "[INFO] Building docker images..."
 	docker-compose -f docker-compose.yml build --no-cache --force-rm --build-arg buildtype=production
-
+	
 push:
-	$(PUSH_COMMAND)
+	@echo "[INFO] Pushing production docker images to repository..."
+	$(PUSH_COMMAND_PRE) && docker-compose -f docker-compose.yml push
 
 deploy:
 	$(DEPLOY_COMMAND)
@@ -90,7 +90,7 @@ stage_build:
 
 stage_push: aws_login
 	@echo "[INFO] Pushing staging docker images to repository..."
-	docker-compose -f docker-compose.stage.yml push
+	$(PUSH_COMMAND_PRE) && docker-compose -f docker-compose.stage.yml push
 
 # - Debug related
 

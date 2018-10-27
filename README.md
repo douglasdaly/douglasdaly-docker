@@ -4,11 +4,7 @@
 
 ## Configure
 
-To configure the necessary variables for the build:
-
-```bash
-$ make configure
-```
+To configure the necessary variables for the copy the `sample.env` file as `.env` and fill out the necessary variable data.
 
 You'll also need to add the appropriate `production.env` file to the project for the web app (or ensure the required environment variables are provided somehow).
 
@@ -29,7 +25,7 @@ To push the images to a repo:
 $ make push
 ```
 
-*Note:* Currently setup with AWS ECR so settings in the main .env file reflect that.  The environment variables `AWS_REGION` and `DOCKER_REPOSITORY` are set there.
+*Note:* Currently setup with AWS ECR so settings.  The environment variables `AWS_REGION` and `DOCKER_REPOSITORY` are set there.
 
 To do both the build and push in one step:
 

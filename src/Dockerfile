@@ -1,8 +1,10 @@
+ARG buildtype
+
 #
-# Stage 0: Get source code
+#   Stage 0: Get source code
 #
 
-FROM alpine:latest AS builder
+FROM alpine:latest AS builder-base
 ARG gitbranch
 
 RUN apk update
@@ -16,10 +18,48 @@ RUN apk del git
 
 
 #
-# Stage 1: Build image
+#   Stage 1 Base
 #
 
-FROM python:3.6-alpine
+FROM python:3.6-alpine AS builder-stage1
+
+COPY --from=builder-base /usr/src/app /src
+
+WORKDIR /src
+
+
+#
+#   Stage 1: Production
+#
+
+FROM builder-stage1 AS builder-production
+
+COPY production.env /src/.env
+
+
+#
+#   Stage 1: Staging
+#
+
+FROM builder-stage1 AS builder-staging
+
+COPY staging.env /src/.env
+
+
+#
+#   Stage 1: Debug
+#
+
+FROM builder-stage1 AS builder-debug
+
+RUN touch .env
+
+
+#
+#   BUILD OUTPUT
+#
+
+FROM builder-${buildtype}
 ARG buildtype
 
 RUN apk update && \
@@ -29,15 +69,9 @@ RUN apk update && \
     apk add --no-cache make bash git
 
 # - Assemble application
-
-COPY --from=builder /usr/src/app /src
-
-WORKDIR /src
-
-RUN mkdir logs/
 RUN make requirements
 
-RUN if [ "$buildtype" = "debug" ]; then touch .env && python scripts/new_secret_key.py && make debug_setup; fi
+RUN if [ "$buildtype" = "debug" ]; then python scripts/new_secret_key.py && make debug_setup; fi
 
 # - Cleanup
 RUN apk del build-deps git

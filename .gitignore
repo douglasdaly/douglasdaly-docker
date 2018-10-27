@@ -3,7 +3,8 @@ env/
 
 # - Environment files
 .env
-*.env
+production.env
+staging.env
 
 # - Project Files (PyCharm)
 .idea/
@@ -12,3 +13,4 @@ env/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+Dockerrun.aws.json

@@ -13,7 +13,7 @@ services:
       - staging.env
     networks:
       - nginx_network
-    image: web:v${VERSION_TAG}-stage
+    image: ${DOCKER_REGISTRY}/web:v${VERSION_TAG}-stage
   
   nginx:
     restart: always
@@ -21,6 +21,8 @@ services:
       context: ./nginx
       args:
         nginxconf: douglasdaly.conf
+    environment:
+      - CERTBOT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:
       - "80:80"
       - "443:443"
@@ -28,7 +30,7 @@ services:
       - web
     networks:
       - nginx_network
-    image: nginx:v${VERSION_TAG}-stage
+    image: ${DOCKER_REGISTRY}/nginx:v${VERSION_TAG}-stage
 
 networks:
   nginx_network:

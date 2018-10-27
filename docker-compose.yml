@@ -7,21 +7,21 @@ services:
       context: ./src
       args:
         gitbranch: master
-    env_file:
-      - production.env
     networks:
       - nginx_network
     image: ${DOCKER_REGISTRY}/web:v${VERSION_TAG}
 
-  nginx:
+  revproxy:
     restart: always
     build: 
       context: ./nginx
       args:
         nginxconf: douglasdaly.conf
+    environment:
+      - CERTBOT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80/tcp
+      - 443:443/tcp
     depends_on:
       - web
     networks:

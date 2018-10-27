@@ -16,7 +16,7 @@ services:
     build: 
       context: ./nginx
       args:
-        nginxconf: douglasdaly.conf
+        nginxconf: www.douglasdaly.conf
     environment:
       - CERTBOT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:

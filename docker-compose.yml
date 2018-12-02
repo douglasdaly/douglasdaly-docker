@@ -16,6 +16,9 @@ services:
     build: 
       context: ./nginx
       args:
+        cert_type: static
+        cert_file: ${CERT_FILE}
+        cert_key: ${CERT_KEY}
         nginxconf: www.douglasdaly.conf
     environment:
       - CERTBOT_EMAIL=${LETSENCRYPT_EMAIL}

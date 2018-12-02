@@ -86,7 +86,7 @@ stage: stage_build stage_push
 
 stage_build:
 	@echo "[INFO] Building Staging docker images..."
-	docker-compose -f docker-compose.stage.yml build --no-cache --force-rm --build-arg buildtype=staging
+	docker-compose -f docker-compose.stage.yml build --no-cache --force-rm
 
 stage_push: aws_login
 	@echo "[INFO] Pushing staging docker images to repository..."
@@ -98,7 +98,7 @@ debug: debug_build debug_run
 
 debug_build:
 	@echo "[INFO] Building Debug docker images..."
-	docker-compose -f docker-compose.debug.yml build --no-cache --force-rm --build-arg buildtype=debug
+	docker-compose -f docker-compose.debug.yml build --no-cache --force-rm
 
 debug_run:
 	@echo "[INFO] Running on local machine..."

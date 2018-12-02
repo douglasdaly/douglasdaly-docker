@@ -9,7 +9,7 @@ services:
         gitbranch: master
     networks:
       - nginx_network
-    image: ${DOCKER_REGISTRY}/web:v${VERSION_TAG}
+    image: ${DOCKER_REGISTRY}/web:v${APP_VERSION_TAG}
 
   revproxy:
     restart: always
@@ -26,7 +26,7 @@ services:
       - web
     networks:
       - nginx_network
-    image: ${DOCKER_REGISTRY}/nginx:v${VERSION_TAG}
+    image: ${DOCKER_REGISTRY}/nginx:v${NGINX_VERSION_TAG}
 
 networks:
   nginx_network:

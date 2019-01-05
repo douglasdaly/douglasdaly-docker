@@ -24,6 +24,7 @@ RUN apk del git
 FROM python:3.6-alpine AS builder-stage1
 
 COPY --from=builder-base /usr/src/app /src
+RUN pip install --upgrade pipenv
 
 WORKDIR /src
 

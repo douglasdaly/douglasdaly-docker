@@ -38,3 +38,4 @@ COPY www.douglasdaly-letsencrypt.conf /etc/nginx/conf.d/www.douglasdaly.conf
 #
 
 FROM build-${cert_type}
+COPY startup_sleep.sh /scripts/startup/startup_sleep.sh

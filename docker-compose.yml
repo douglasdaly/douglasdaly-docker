@@ -2,23 +2,22 @@ version: '3'
 
 services:
   web:
-    restart: always
+    image: ${DOCKER_REGISTRY}/web:v${APP_VERSION_TAG}
     build: 
       context: ./src
       args:
         gitbranch: master
+    restart: always
     networks:
       - nginx_network
-    image: ${DOCKER_REGISTRY}/web:v${APP_VERSION_TAG}
-
+    
   revproxy:
+    image: ${DOCKER_REGISTRY}/nginx:v${NGINX_VERSION_TAG}-${CERT_TYPE}
     restart: always
     build: 
       context: ./nginx
       args:
         cert_type: ${CERT_TYPE}
-        cert_file: ${CERT_FILE}
-        cert_key: ${CERT_KEY}
     environment:
       - CERTBOT_EMAIL=${LETSENCRYPT_EMAIL}
     ports:
@@ -28,7 +27,6 @@ services:
       - web
     networks:
       - nginx_network
-    image: ${DOCKER_REGISTRY}/nginx:v${NGINX_VERSION_TAG}-${CERT_TYPE}
 
 networks:
   nginx_network:

@@ -11,21 +11,6 @@ COPY www.douglasdaly-nocert.conf /etc/nginx/conf.d/www.douglasdaly.conf
 
 
 #
-#   Existing Certificate Build
-#
-
-FROM nginx:alpine AS build-static
-ARG cert_file
-ARG cert_key
-
-COPY ${cert_file} /etc/certs/www.douglasdaly.com/fullchain.pem
-COPY ${cert_key} /etc/certs/www.douglasdaly.com/privkey.pem
-
-RUN rm /etc/nginx/conf.d/default.conf
-COPY www.douglasdaly-static.conf /etc/nginx/conf.d/www.douglasdaly.conf
-
-
-#
 #   Lets Encrypt Build
 #
 
